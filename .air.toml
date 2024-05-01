@@ -1,0 +1,6 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  bin = "./tmp/bin/main"
+  cmd = "make build"
