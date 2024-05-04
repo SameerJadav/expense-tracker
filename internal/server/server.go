@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/SameerJadav/fuzi/internal/logger"
+	"github.com/SameerJadav/expense-tracker/internal/logger"
 )
 
 type server struct {

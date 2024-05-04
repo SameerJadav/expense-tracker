@@ -1,4 +1,4 @@
-# Fuzi
+# Expense Tracker
 
 Modern example app built with Go in the backend and Next.js in the frontend with features like authentication, middleware, and API routes.
 

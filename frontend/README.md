@@ -1,1 +1,1 @@
-# Fuzi - Frontend
+# Expense Tracker - Frontend

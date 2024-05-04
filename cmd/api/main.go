@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/SameerJadav/fuzi/internal/logger"
-	"github.com/SameerJadav/fuzi/internal/server"
+	"github.com/SameerJadav/expense-tracker/internal/logger"
+	"github.com/SameerJadav/expense-tracker/internal/server"
 )
 
 func main() {

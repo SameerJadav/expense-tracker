@@ -1,13 +1,13 @@
 // TODO: change details
 export const SITE = {
-  name: "Fuzi",
+  name: "expense-tracker",
   description: "",
   // TODO: change prod url
   url:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : "https://fuzi.vercel.app",
-  repo: "https://github.com/SameerJadav/fuzi",
+  repo: "https://github.com/SameerJadav/expense-tracker",
   author: {
     name: "Sameer Jadav",
     url: "https://sameerjadav.com",
