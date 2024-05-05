@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/SameerJadav/expense-tracker/internal/logger"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type server struct {
