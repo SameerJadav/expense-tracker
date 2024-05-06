@@ -7,8 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/SameerJadav/expense-tracker/internal/logger"
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/logger"
 )
 
 type server struct {

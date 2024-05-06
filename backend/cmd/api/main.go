@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/SameerJadav/expense-tracker/internal/logger"
-	"github.com/SameerJadav/expense-tracker/internal/server"
+	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/logger"
+	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/server"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {

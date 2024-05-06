@@ -1,4 +1,4 @@
-module github.com/SameerJadav/expense-tracker
+module github.com/SameerJadav/expense-tracker/tree/main/backend
 
 go 1.22.0
 
