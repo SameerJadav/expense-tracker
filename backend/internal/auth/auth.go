@@ -25,7 +25,7 @@ func Init() {
 
 	githubId := os.Getenv("GITHUB_ID")
 	githubSecret := os.Getenv("GITHUB_SECRET")
-	githubCallbackURL := "http://localhost:8080/auth/github/callback"
+	githubCallbackURL := "http://localhost:8080/api/auth/github/callback"
 	github := github.New(githubId, githubSecret, githubCallbackURL)
 
 	goth.UseProviders(github)

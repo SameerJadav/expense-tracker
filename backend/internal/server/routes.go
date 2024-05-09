@@ -13,18 +13,19 @@ import (
 func (s *server) routes() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /auth/{provider}", s.handleAuth)
-	mux.HandleFunc("GET /auth/{provider}/callback", s.handleAuthCallback)
-	mux.HandleFunc("GET /logout/{provider}", s.handleLogout)
-	mux.HandleFunc("GET /user", s.getUser)
+	mux.HandleFunc("GET /api/auth/{provider}", s.handleAuth)
+	mux.HandleFunc("GET /api/auth/{provider}/callback", s.handleAuthCallback)
+	mux.HandleFunc("GET /api/logout/{provider}", s.handleLogout)
+	mux.HandleFunc("GET /api/user", s.getUser)
 
 	return mux
 }
 
 type user struct {
-	AvatarURL string `json:"avatarURL"`
 	Name      string `json:"name"`
 	Email     string `json:"email"`
+	UserID    string `json:"userID"`
+	AvatarURL string `json:"avatarURL"`
 }
 
 func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +67,7 @@ func (s *server) handleAuthCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: change redirect url
-	http.Redirect(w, r, "http://localhost:8080", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "http://localhost:3000", http.StatusTemporaryRedirect)
 }
 
 func (s *server) handleLogout(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +84,7 @@ func (s *server) handleLogout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: change redirect url
-	http.Redirect(w, r, "http://localhost:8080", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "http://localhost:3000", http.StatusTemporaryRedirect)
 }
 
 func (s *server) getUser(w http.ResponseWriter, r *http.Request) {
@@ -102,9 +103,10 @@ func (s *server) getUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &user{
-		AvatarURL: gothUser.AvatarURL,
 		Name:      gothUser.Name,
 		Email:     gothUser.Email,
+		UserID:    gothUser.UserID,
+		AvatarURL: gothUser.AvatarURL,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

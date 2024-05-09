@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Modern example app built with Go in the backend and Next.js in the frontend with features like authentication, middleware, and API routes.
+Modern example app built with Go in the backend and Vite + React in the frontend with features like authentication, middleware, and API routes.
 
 ## Features
 
@@ -11,9 +11,20 @@ Modern example app built with Go in the backend and Next.js in the frontend with
 ## Stack
 
 **Backend:** Go
-**Frontend:** Next.js
+**Frontend:** Vite + React
+**Router:** TanStack Query
 **Authentication:** Goth
-**Asynchronous state management:** TanStack Query
+
+## Tables
+
+**Expenses**
+
+| Column  | Type           |
+| ------- | -------------- |
+| id      | integer        |
+| user_id | text           |
+| title   | text           |
+| amount  | numeric(12, 2) |
 
 ## Contributing
 
