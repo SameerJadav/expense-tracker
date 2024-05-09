@@ -1,12 +1,12 @@
 /** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions & import("@trivago/prettier-plugin-sort-imports").PluginConfig} */
-const config = {
+const prettierConfig = {
   importOrder: [
     "^(react/(.*)$)|^(react$)",
     "^(next/(.*)$)|^(next$)",
     "<THIRD_PARTY_MODULES>",
     "^(~/utils/(.*)$)|^(~/utils)",
     "^~/components/(.*)$",
-    "^(~/config/(.*)$)|^(~/config)",
+    "^~/config",
     "^~/styles/(.*)$",
     "^~/images/(.*)$",
     "^[./]",
@@ -17,4 +17,4 @@ const config = {
   ],
 };
 
-export default config;
+export default prettierConfig;
