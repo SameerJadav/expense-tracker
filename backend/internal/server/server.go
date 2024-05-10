@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
@@ -12,9 +13,10 @@ import (
 
 type server struct {
 	port int
+	db   *sql.DB
 }
 
-func NewServer() (*http.Server, error) {
+func NewServer(db *sql.DB) (*http.Server, error) {
 	port, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		return nil, err
@@ -22,6 +24,7 @@ func NewServer() (*http.Server, error) {
 
 	s := &server{
 		port: port,
+		db:   db,
 	}
 
 	server := &http.Server{

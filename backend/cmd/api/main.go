@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/auth"
+	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/database"
 	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/logger"
 	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/server"
 	"github.com/joho/godotenv"
@@ -15,7 +16,12 @@ func main() {
 
 	auth.Init()
 
-	server, err := server.NewServer()
+	db, err := database.New()
+	if err != nil {
+		logger.Error.Fatalln(err)
+	}
+
+	server, err := server.NewServer(db)
 	if err != nil {
 		logger.Error.Fatalln(err)
 	}
