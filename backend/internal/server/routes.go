@@ -16,7 +16,10 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("GET /api/auth/{provider}", s.handleAuth)
 	mux.HandleFunc("GET /api/auth/{provider}/callback", s.handleAuthCallback)
 	mux.HandleFunc("GET /api/logout/{provider}", s.handleLogout)
+
 	mux.HandleFunc("GET /api/user", s.getUser)
+
+	mux.HandleFunc("POST /api/expenses/create", s.createExpense)
 
 	return mux
 }
@@ -66,7 +69,6 @@ func (s *server) handleAuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: change redirect url
 	http.Redirect(w, r, "http://localhost:3000", http.StatusTemporaryRedirect)
 }
 
@@ -83,7 +85,6 @@ func (s *server) handleLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: change redirect url
 	http.Redirect(w, r, "http://localhost:3000", http.StatusTemporaryRedirect)
 }
 
@@ -112,6 +113,45 @@ func (s *server) getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(user); err != nil {
 		logger.Error.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+}
+
+type expense struct {
+	UserID string  `json:"userId"`
+	Title  string  `json:"title"`
+	Amount float64 `json:"amount"`
+	Date   string  `json:"date"`
+}
+
+func (s *server) createExpense(w http.ResponseWriter, r *http.Request) {
+	if !validateContentType(w, r) {
+		return
+	}
+
+	r.Body = http.MaxBytesReader(w, r.Body, 1048576)
+	defer r.Body.Close()
+
+	dec := json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+
+	expense := &expense{}
+
+	if err := dec.Decode(expense); err != nil {
+		handleJSONDecodeErrors(w, err)
+		return
+	}
+
+	if !validateSignleJSONObject(w, r) {
+		return
+	}
+
+	stmt := "INSERT INTO expenses (user_id, title, amount, date) VALUES ($1, $2, $3, $4)"
+
+	_, err := s.db.Exec(stmt, expense.UserID, expense.Title, expense.Amount, expense.Date)
+	if err != nil {
+		logger.Error.Fatalln(err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

@@ -1,29 +1,56 @@
-import { grayDark } from "@radix-ui/colors";
+import { gray, red } from "@radix-ui/colors";
 import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["geist-sans", ...fontFamily.sans],
+      },
       colors: {
         gray: {
-          1: grayDark.gray1,
-          2: grayDark.gray2,
-          3: grayDark.gray3,
-          4: grayDark.gray4,
-          5: grayDark.gray5,
-          6: grayDark.gray6,
-          7: grayDark.gray7,
-          8: grayDark.gray8,
-          9: grayDark.gray9,
-          10: grayDark.gray10,
-          11: grayDark.gray11,
-          12: grayDark.gray12,
+          1: gray.gray1,
+          2: gray.gray2,
+          3: gray.gray3,
+          4: gray.gray4,
+          5: gray.gray5,
+          6: gray.gray6,
+          7: gray.gray7,
+          8: gray.gray8,
+          9: gray.gray9,
+          10: gray.gray10,
+          11: gray.gray11,
+          12: gray.gray12,
         },
+        red: {
+          1: red.red1,
+          2: red.red2,
+          3: red.red3,
+          4: red.red4,
+          5: red.red5,
+          6: red.red6,
+          7: red.red7,
+          8: red.red8,
+          9: red.red9,
+          10: red.red10,
+          11: red.red11,
+          12: red.red12,
+        },
+      },
+      keyframes: {
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 150ms ease-out",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
   future: {
     hoverOnlyWhenSupported: true,
   },

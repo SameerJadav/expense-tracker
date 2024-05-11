@@ -15,17 +15,6 @@ Modern example app built with Go in the backend and Vite + React in the frontend
 **Router:** TanStack Query
 **Authentication:** Goth
 
-## Tables
-
-**Expenses**
-
-| Column  | Type           |
-| ------- | -------------- |
-| id      | integer        |
-| user_id | text           |
-| title   | text           |
-| amount  | numeric(12, 2) |
-
 ## Contributing
 
 If you'd like to contribute, please feel free to open an issue or submit a pull request. I welcome your suggestions and improvements!

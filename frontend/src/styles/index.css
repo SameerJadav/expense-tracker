@@ -3,5 +3,27 @@
 @tailwind utilities;
 
 body {
-  @apply mx-auto w-full max-w-3xl bg-gray-1 px-4 font-sans text-gray-12 antialiased md:px-6 lg:p-0;
+  @apply bg-gray-1 font-sans text-gray-12 antialiased;
+}
+
+@font-face {
+  font-family: "geist-sans";
+  src: url("/fonts/geist-sans/regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "geist-sans";
+  src: url("/fonts/geist-sans/medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "geist-sans";
+  src: url("/fonts/geist-sans/bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
