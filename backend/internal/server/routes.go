@@ -10,6 +10,26 @@ import (
 	"github.com/markbates/goth/gothic"
 )
 
+type contextKey string
+
+type user struct {
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	UserID    string `json:"userID"`
+	AvatarURL string `json:"avatarURL"`
+}
+
+type expense struct {
+	UserID string  `json:"userId"`
+	Title  string  `json:"title"`
+	Amount float64 `json:"amount"`
+	Date   string  `json:"date"`
+}
+
+const (
+	providerContextKey contextKey = "provider"
+)
+
 func (s *server) routes() http.Handler {
 	mux := http.NewServeMux()
 
@@ -25,13 +45,6 @@ func (s *server) routes() http.Handler {
 	return mux
 }
 
-type user struct {
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	UserID    string `json:"userID"`
-	AvatarURL string `json:"avatarURL"`
-}
-
 func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
 	provider := r.PathValue("provider")
 	if provider == "" {
@@ -39,7 +52,7 @@ func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
+	r = r.WithContext(context.WithValue(r.Context(), providerContextKey, provider))
 
 	gothic.BeginAuthHandler(w, r)
 }
@@ -51,7 +64,7 @@ func (s *server) handleAuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
+	r = r.WithContext(context.WithValue(r.Context(), providerContextKey, provider))
 
 	user, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
@@ -117,13 +130,6 @@ func (s *server) getUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-}
-
-type expense struct {
-	UserID string  `json:"userId"`
-	Title  string  `json:"title"`
-	Amount float64 `json:"amount"`
-	Date   string  `json:"date"`
 }
 
 func (s *server) createExpense(w http.ResponseWriter, r *http.Request) {
