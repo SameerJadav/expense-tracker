@@ -5,10 +5,17 @@ import type { User } from "~/types";
 export default function Form(): JSX.Element {
   const { data: user } = useQuery({
     queryKey: ["user-info"],
-    queryFn: async function () {
-      const res = await fetch("/api/user");
-      const data = (await res.json()) as User;
-      return data;
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/user");
+        if (!res.ok) {
+          throw new Error(`HTTP error ${res.status}`);
+        }
+        const data: User = await res.json();
+        return data;
+      } catch (err) {
+        console.error(err);
+      }
     },
   });
 
@@ -31,6 +38,9 @@ export default function Form(): JSX.Element {
           date: value.date,
         }),
       });
+      value.title = "";
+      value.amount = 0;
+      value.date = "";
     },
   });
 
@@ -66,7 +76,7 @@ export default function Form(): JSX.Element {
                 className="rounded-md border border-gray-7 bg-gray-3 p-2 transition-colors ease-out placeholder:text-gray-11 hover:border-gray-8 focus-visible:border-gray-8 focus-visible:outline-none"
               />
               {field.state.meta.errors ? (
-                <p className="text-red-9 h-[14px] text-sm/none">
+                <p className="h-[14px] text-sm/none text-red-9">
                   {field.state.meta.errors}
                 </p>
               ) : null}
@@ -95,7 +105,7 @@ export default function Form(): JSX.Element {
                 className="rounded-md border border-gray-7 bg-gray-3 p-2 transition-colors ease-out placeholder:text-gray-11 hover:border-gray-8 focus-visible:border-gray-8 focus-visible:outline-none"
               />
               {field.state.meta.errors ? (
-                <p className="text-red-9 h-[14px] text-sm/none">
+                <p className="h-[14px] text-sm/none text-red-9">
                   {field.state.meta.errors}
                 </p>
               ) : null}
@@ -123,7 +133,7 @@ export default function Form(): JSX.Element {
                 className="rounded-md border border-gray-7 bg-gray-3 p-2 transition-colors ease-out hover:border-gray-8 focus-visible:border-gray-8 focus-visible:outline-none"
               />
               {field.state.meta.errors ? (
-                <p className="text-red-9 h-[14px] text-sm/none">
+                <p className="h-[14px] text-sm/none text-red-9">
                   {field.state.meta.errors}
                 </p>
               ) : null}

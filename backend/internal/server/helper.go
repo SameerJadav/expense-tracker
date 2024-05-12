@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/logger"
@@ -63,19 +62,4 @@ func validateContentType(w http.ResponseWriter, r *http.Request) bool {
 		}
 	}
 	return true
-}
-
-func parseIDFromPath(w http.ResponseWriter, r *http.Request) (int, error) {
-	id, err := strconv.Atoi(r.PathValue("id"))
-	if err != nil {
-		logger.Error.Println(err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return 0, err
-	}
-	if id < 1 {
-		msg := "User not found"
-		http.Error(w, msg, http.StatusNotFound)
-		return 0, err
-	}
-	return id, nil
 }

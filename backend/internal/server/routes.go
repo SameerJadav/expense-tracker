@@ -20,6 +20,7 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("GET /api/user", s.getUser)
 
 	mux.HandleFunc("POST /api/expenses/create", s.createExpense)
+	mux.HandleFunc("GET /api/expenses/{userID}", s.getUserExpenses)
 
 	return mux
 }
@@ -152,6 +153,40 @@ func (s *server) createExpense(w http.ResponseWriter, r *http.Request) {
 	_, err := s.db.Exec(stmt, expense.UserID, expense.Title, expense.Amount, expense.Date)
 	if err != nil {
 		logger.Error.Fatalln(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (s *server) getUserExpenses(w http.ResponseWriter, r *http.Request) {
+	userID := r.PathValue("userID")
+
+	stmt := "SELECT title, amount, date FROM expenses WHERE user_id = $1"
+	rows, err := s.db.Query(stmt, userID)
+	if err != nil {
+		logger.Error.Fatalln(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	expenses := []*expense{}
+
+	for rows.Next() {
+		expense := &expense{}
+
+		if err = rows.Scan(&expense.Title, &expense.Amount, &expense.Date); err != nil {
+			logger.Error.Fatalln(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		expenses = append(expenses, expense)
+	}
+
+	w.Header().Set("Content-type", "application/json")
+	if err = json.NewEncoder(w).Encode(expenses); err != nil {
+		logger.Error.Println(err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

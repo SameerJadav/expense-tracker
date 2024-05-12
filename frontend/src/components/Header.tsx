@@ -7,10 +7,17 @@ import Menu from "~/components/Menu";
 export default function Header() {
   const { data: user } = useQuery({
     queryKey: ["user-info"],
-    queryFn: async function () {
-      const res = await fetch("/api/user");
-      const data = (await res.json()) as User;
-      return data;
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/user");
+        if (!res.ok) {
+          throw new Error(`HTTP error ${res.status}`);
+        }
+        const data: User = await res.json();
+        return data;
+      } catch (err) {
+        console.error(err);
+      }
     },
   });
 

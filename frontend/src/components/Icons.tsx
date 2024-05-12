@@ -4,6 +4,7 @@ import {
   GitHubLogoIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
+  TrashIcon,
 } from "@radix-ui/react-icons";
 
 const Icons = {
@@ -11,7 +12,8 @@ const Icons = {
   Cross: Cross1Icon,
   Github: GitHubLogoIcon,
   ChevronRight: ChevronRightIcon,
-  ChevronLeft: ChevronLeftIcon
+  ChevronLeft: ChevronLeftIcon,
+  Trash: TrashIcon,
 };
 
 export default Icons;

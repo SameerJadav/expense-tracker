@@ -4,3 +4,10 @@ export type User = {
   userID: string;
   avatarURL: string;
 };
+
+export type Expense = {
+  userID: string;
+  title: string;
+  amount: number;
+  date: string;
+};
