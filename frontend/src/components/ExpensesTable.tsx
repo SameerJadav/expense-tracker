@@ -10,6 +10,12 @@ export default function ExpensesTable() {
     return null;
   }
 
+  const sortedExpenses = expenses.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return (
     <div className="mt-8 overflow-auto rounded-md border border-gray-7 shadow">
       <table className="w-full">
@@ -30,7 +36,7 @@ export default function ExpensesTable() {
           </tr>
         </thead>
         <tbody className="w-full">
-          {expenses.map((expense) => (
+          {sortedExpenses.map((expense) => (
             <tr key={expense.userID} className="w-full border-b border-gray-7">
               <td className="p-2 text-left align-middle">{expense.title}</td>
               <td className="p-2 text-left align-middle">
