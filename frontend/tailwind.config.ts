@@ -1,4 +1,4 @@
-import { gray, red } from "@radix-ui/colors";
+import { gray, red, blue } from "@radix-ui/colors";
 import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
@@ -37,6 +37,20 @@ export default {
           10: red.red10,
           11: red.red11,
           12: red.red12,
+        },
+        blue: {
+          1: blue.blue1,
+          2: blue.blue2,
+          3: blue.blue3,
+          4: blue.blue4,
+          5: blue.blue5,
+          6: blue.blue6,
+          7: blue.blue7,
+          8: blue.blue8,
+          9: blue.blue9,
+          10: blue.blue10,
+          11: blue.blue11,
+          12: blue.blue12,
         },
       },
       keyframes: {

@@ -31,7 +31,7 @@ export default function Menu() {
               to="/"
               className="text-2xl font-bold leading-none tracking-tighter"
             >
-              Expense Tracker
+              Expense<span className="text-blue-9">Tracker</span>
             </Link>
             <Close asChild>
               <button>
@@ -48,30 +48,20 @@ export default function Menu() {
               About
             </Link>
             <div className="border-t border-gray-6 pt-6">
-              {user ? (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={user.avatarURL}
-                      alt={user.name}
-                      className="size-10 rounded-md"
-                    />
-                    <div className="space-y-1 *:leading-none">
-                      <p className="font-medium">{user.name}</p>
-                      <p className="text-gray-11">{user.email}</p>
-                    </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <img
+                    src={user?.avatarURL}
+                    alt={user?.name}
+                    className="size-10 rounded-md"
+                  />
+                  <div className="space-y-1 *:leading-none">
+                    <p className="font-medium">{user?.name}</p>
+                    <p className="text-gray-11">{user?.email}</p>
                   </div>
-                  <button>Log out</button>
                 </div>
-              ) : (
-                <a
-                  href="/api/auth/github"
-                  className="flex w-max items-center gap-2 rounded-md border border-gray-7 bg-gray-3 px-4 py-1 font-medium"
-                >
-                  <Icons.Github className="size-5" />
-                  <span>Login with GitHub</span>
-                </a>
-              )}
+                <button>Log out</button>
+              </div>
             </div>
           </div>
         </div>

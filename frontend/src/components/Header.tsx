@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { User } from "~/types";
-import Icons from "~/components/Icons";
 import Menu from "~/components/Menu";
 
 export default function Header() {
@@ -22,10 +21,10 @@ export default function Header() {
   });
 
   return (
-    <header className="flex items-center justify-between bg-gray-1 p-4">
+    <div className="flex items-center justify-between bg-gray-1 p-4">
       <div className="flex items-center gap-4 *:leading-none">
         <Link to="/" className="text-2xl font-bold tracking-tighter">
-          Expense Tracker
+          Expense<span className="text-blue-9">Tracker</span>
         </Link>
         <Link
           to="/"
@@ -42,21 +41,12 @@ export default function Header() {
       </div>
       <Menu />
       <div className="hidden md:block">
-        {user ? (
-          <img
-            src={user.avatarURL}
-            alt={user.name}
-            className="size-8 rounded-md"
-          />
-        ) : (
-          <a
-            href="/api/auth/github"
-            className="flex items-center gap-2 rounded-md border border-gray-7 bg-gray-3 px-4 py-1 font-medium transition-colors ease-out hover:border-gray-8 hover:bg-gray-4"
-          >
-            <Icons.Github className="size-5" /> <span>Login with GitHub</span>
-          </a>
-        )}
+        <img
+          src={user?.avatarURL}
+          alt={user?.name}
+          className="size-8 rounded-md"
+        />
       </div>
-    </header>
+    </div>
   );
 }

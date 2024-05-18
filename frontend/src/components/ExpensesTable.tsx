@@ -40,7 +40,7 @@ export default function ExpensesTable() {
   });
 
   return (
-    <div className="mt-4  w-full overflow-auto rounded-md border border-gray-7 shadow">
+    <div className="mt-8 overflow-auto rounded-md border border-gray-7 shadow">
       <table className="w-full">
         <thead className="w-full">
           <tr className="w-full border-b border-gray-7">

@@ -26,18 +26,14 @@ type expense struct {
 	Date   string  `json:"date"`
 }
 
-const (
-	providerContextKey contextKey = "provider"
-)
-
 func (s *server) routes() http.Handler {
 	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /api/user", s.getUser)
 
 	mux.HandleFunc("GET /api/auth/{provider}", s.handleAuth)
 	mux.HandleFunc("GET /api/auth/{provider}/callback", s.handleAuthCallback)
 	mux.HandleFunc("GET /api/logout/{provider}", s.handleLogout)
-
-	mux.HandleFunc("GET /api/user", s.getUser)
 
 	mux.HandleFunc("POST /api/expenses/create", s.createExpense)
 	mux.HandleFunc("GET /api/expenses/{userID}", s.getUserExpenses)
@@ -48,11 +44,11 @@ func (s *server) routes() http.Handler {
 func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
 	provider := r.PathValue("provider")
 	if provider == "" {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		http.Error(w, "provider not found", http.StatusInternalServerError)
 		return
 	}
 
-	r = r.WithContext(context.WithValue(r.Context(), providerContextKey, provider))
+	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
 
 	gothic.BeginAuthHandler(w, r)
 }
@@ -60,11 +56,11 @@ func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
 func (s *server) handleAuthCallback(w http.ResponseWriter, r *http.Request) {
 	provider := r.PathValue("provider")
 	if provider == "" {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		http.Error(w, "provider not found", http.StatusInternalServerError)
 		return
 	}
 
-	r = r.WithContext(context.WithValue(r.Context(), providerContextKey, provider))
+	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
 
 	user, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
@@ -168,6 +164,7 @@ func (s *server) getUserExpenses(w http.ResponseWriter, r *http.Request) {
 	userID := r.PathValue("userID")
 
 	stmt := "SELECT title, amount, date FROM expenses WHERE user_id = $1"
+
 	rows, err := s.db.Query(stmt, userID)
 	if err != nil {
 		logger.Error.Fatalln(err)
