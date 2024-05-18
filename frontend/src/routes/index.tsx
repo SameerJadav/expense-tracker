@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { User } from "~/types";
+import { getUserQueryOptions } from "~/utils/api";
 import ExpensesTable from "~/components/ExpensesTable";
 import Form from "~/components/Form";
 import Header from "~/components/Header";
@@ -11,21 +11,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage(): JSX.Element {
-  const { data: user } = useQuery({
-    queryKey: ["user-info"],
-    queryFn: async () => {
-      try {
-        const res = await fetch("/api/user");
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
-        const data: User = await res.json();
-        return data;
-      } catch (err) {
-        console.error(err);
-      }
-    },
-  });
+  const { data: user } = useQuery(getUserQueryOptions);
 
   return user ? (
     <>

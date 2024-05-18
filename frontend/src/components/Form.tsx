@@ -1,23 +1,11 @@
 import { useForm } from "@tanstack/react-form";
-import { useQuery } from "@tanstack/react-query";
-import type { User } from "~/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getAllExpensesQueryOptions, getUserQueryOptions } from "~/utils/api";
 
 export default function Form(): JSX.Element {
-  const { data: user } = useQuery({
-    queryKey: ["user-info"],
-    queryFn: async () => {
-      try {
-        const res = await fetch("/api/user");
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
-        const data: User = await res.json();
-        return data;
-      } catch (err) {
-        console.error(err);
-      }
-    },
-  });
+  const queryClient = useQueryClient();
+
+  const { data: user } = useQuery(getUserQueryOptions);
 
   const form = useForm({
     defaultValues: {
@@ -25,7 +13,7 @@ export default function Form(): JSX.Element {
       amount: 0,
       date: "",
     },
-    onSubmit: ({ value }) => {
+    onSubmit: async ({ value }) => {
       fetch("/api/expenses/create", {
         method: "POST",
         headers: {
@@ -38,6 +26,32 @@ export default function Form(): JSX.Element {
           date: value.date,
         }),
       });
+
+      queryClient.setQueryData(
+        getAllExpensesQueryOptions(user).queryKey,
+        (oldvalue) => {
+          if (!oldvalue) {
+            return [
+              {
+                userID: "",
+                title: value.title,
+                amount: value.amount,
+                date: value.date,
+              },
+            ];
+          }
+          return [
+            ...oldvalue,
+            {
+              userID: "",
+              title: value.title,
+              amount: value.amount,
+              date: value.date,
+            },
+          ];
+        },
+      );
+
       value.title = "";
       value.amount = 0;
       value.date = "";

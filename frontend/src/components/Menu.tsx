@@ -1,20 +1,11 @@
 import { Close, Content, Root, Trigger } from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import type { User } from "~/types";
+import { getUserQueryOptions } from "~/utils/api";
 import Icons from "~/components/Icons";
 
-async function fetchUser() {
-  const res = await fetch("/api/user");
-  const data = (await res.json()) as User;
-  return data;
-}
-
 export default function Menu() {
-  const { data: user } = useQuery({
-    queryKey: ["user-info"],
-    queryFn: fetchUser,
-  });
+  const { data: user } = useQuery(getUserQueryOptions);
 
   return (
     <Root>
@@ -60,7 +51,7 @@ export default function Menu() {
                     <p className="text-gray-11">{user?.email}</p>
                   </div>
                 </div>
-                <button>Log out</button>
+                <button>Sign out</button>
               </div>
             </div>
           </div>

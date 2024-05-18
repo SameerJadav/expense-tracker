@@ -1,24 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import type { User } from "~/types";
+import { getUserQueryOptions } from "~/utils/api";
 import Menu from "~/components/Menu";
 
 export default function Header() {
-  const { data: user } = useQuery({
-    queryKey: ["user-info"],
-    queryFn: async () => {
-      try {
-        const res = await fetch("/api/user");
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
-        const data: User = await res.json();
-        return data;
-      } catch (err) {
-        console.error(err);
-      }
-    },
-  });
+  const { data: user } = useQuery(getUserQueryOptions);
 
   return (
     <div className="flex items-center justify-between bg-gray-1 p-4">
