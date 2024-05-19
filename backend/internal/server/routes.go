@@ -6,6 +6,8 @@ import (
 	"net/http"
 
 	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/logger"
+	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/middleware"
+	"github.com/justinas/alice"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 )
@@ -38,7 +40,7 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("POST /api/expenses/create", s.createExpense)
 	mux.HandleFunc("GET /api/expenses/{userID}", s.getUserExpenses)
 
-	return mux
+	return alice.New(middleware.RecoverPanic, middleware.LogRequest, middleware.SecureHeaders).Then(mux)
 }
 
 func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
