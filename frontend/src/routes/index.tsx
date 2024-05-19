@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { getUserQueryOptions } from "~/utils/api";
-import ExpensesTable from "~/components/ExpensesTable";
+import Expenses from "~/components/Expenses";
 import Form from "~/components/Form";
 import Header from "~/components/Header";
 import Icons from "~/components/Icons";
@@ -14,13 +14,13 @@ function HomePage(): JSX.Element {
   const { data: user } = useQuery(getUserQueryOptions);
 
   return user ? (
-    <>
+    <div className="mx-auto max-w-4xl">
       <Header />
       <div className="mb-14 mt-4 px-4">
         <Form />
-        <ExpensesTable />
+        <Expenses />
       </div>
-    </>
+    </div>
   ) : (
     <div className="w-dvh flex h-dvh items-center justify-center bg-gray-3 p-4">
       <div className="w-full rounded-md bg-gray-1 p-6 shadow md:max-w-md">
