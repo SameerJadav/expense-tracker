@@ -27,9 +27,14 @@ func NewServer(db *sql.DB) (*http.Server, error) {
 		db:   db,
 	}
 
+	handler, err := s.routes()
+	if err != nil {
+		return nil, err
+	}
+
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", s.port),
-		Handler:      s.routes(),
+		Handler:      handler,
 		ErrorLog:     logger.Error,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,

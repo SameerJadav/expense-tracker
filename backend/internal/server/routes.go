@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"embed"
 	"encoding/json"
+	"io/fs"
 	"net/http"
 
 	"github.com/SameerJadav/expense-tracker/tree/main/backend/internal/logger"
@@ -11,8 +13,6 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 )
-
-type contextKey string
 
 type user struct {
 	Name      string `json:"name"`
@@ -28,8 +28,15 @@ type expense struct {
 	Date   string  `json:"date"`
 }
 
-func (s *server) routes() http.Handler {
+func (s *server) routes() (http.Handler, error) {
 	mux := http.NewServeMux()
+
+	assets, err := assets()
+	if err != nil {
+		return nil, err
+	}
+
+	mux.Handle("GET /", http.FileServerFS(assets))
 
 	mux.HandleFunc("GET /api/user", s.getUser)
 
@@ -40,7 +47,18 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("POST /api/expenses/create", s.createExpense)
 	mux.HandleFunc("GET /api/expenses/{userID}", s.getUserExpenses)
 
-	return alice.New(middleware.RecoverPanic, middleware.LogRequest, middleware.SecureHeaders).Then(mux)
+	return alice.New(middleware.RecoverPanic, middleware.LogRequest, middleware.SecureHeaders).Then(mux), nil
+}
+
+//go:embed dist/*
+var content embed.FS
+
+func assets() (fs.FS, error) {
+	subFS, err := fs.Sub(content, "dist")
+	if err != nil {
+		return nil, err
+	}
+	return subFS, nil
 }
 
 func (s *server) handleAuth(w http.ResponseWriter, r *http.Request) {
@@ -81,7 +99,7 @@ func (s *server) handleAuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "http://localhost:3000", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
 func (s *server) handleLogout(w http.ResponseWriter, r *http.Request) {
@@ -97,7 +115,7 @@ func (s *server) handleLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "http://localhost:3000", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
 func (s *server) getUser(w http.ResponseWriter, r *http.Request) {
